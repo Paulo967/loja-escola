@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Finalização de pedido simulado na Almacén DtMF com consulta automática de CEP via ViaCEP.">
+  <title>Almacén DtMF | Finalizar Pedido</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23f8d948' stroke='%231d63b8' stroke-width='8'/><text x='50' y='67' font-size='52' text-anchor='middle'>🐸</text></svg>">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo principal</a>
+
+  <header class="site-header">
+    <nav class="navbar navbar-expand-lg" aria-label="Navegação principal">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <span class="dtmf-logo-text">Almacén DtMF</span>
+          <span class="brand-badge">PR · 2025</span>
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="index.html">← Continuar explorando</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main id="conteudo" class="container py-5">
+    <div class="row g-5">
+      <section class="col-lg-8" aria-labelledby="titulo-checkout">
+        <p class="eyebrow-sticker mb-2">Registro de Envio</p>
+        <h1 id="titulo-checkout" class="dtmf-hero-title h2 mb-2">Dados para entrega do sticker</h1>
+        <p class="hero-card-note mb-4">Este formulário é uma simulação acadêmica e não realiza cobranças reais.</p>
+
+        <form id="checkoutForm" novalidate>
+          <fieldset class="checkout-fieldset mb-4">
+            <legend class="h5 fw-bold px-2 w-auto" style="color: var(--sticker-blue);">1. Dados pessoais</legend>
+            <div class="row g-3">
+              <div class="col-md-7">
+                <label for="nome" class="form-label fw-bold">Nome completo</label>
+                <input class="form-control" id="nome" name="nome" type="text" autocomplete="name" required>
+                <div class="invalid-feedback">Informe seu nome completo.</div>
+              </div>
+              <div class="col-md-5">
+                <label for="telefone" class="form-label fw-bold">Telefone / WhatsApp</label>
+                <input class="form-control" id="telefone" name="telefone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(11) 99999-9999" maxlength="15" required>
+                <div class="invalid-feedback">Informe um telefone válido com DDD.</div>
+              </div>
+              <div class="col-12">
+                <label for="email" class="form-label fw-bold">E-mail</label>
+                <input class="form-control" id="email" name="email" type="email" autocomplete="email" placeholder="voce@exemplo.com" required>
+                <div class="invalid-feedback">Informe um endereço de e-mail válido.</div>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="checkout-fieldset mb-4">
+            <legend class="h5 fw-bold px-2 w-auto" style="color: var(--sticker-blue);">2. Endereço de entrega (ViaCEP)</legend>
+            <div class="row g-3">
+              <div class="col-md-5">
+                <label for="cep" class="form-label fw-bold">CEP</label>
+                <div class="input-group">
+                  <input class="form-control" id="cep" name="cep" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" maxlength="9" aria-describedby="ajudaCep" required>
+                  <button class="btn btn-dtmf" id="buscarCep" type="button">Buscar CEP</button>
+                </div>
+                <div id="ajudaCep" class="form-text fw-semibold">Digite 8 dígitos (ex.: 01001-000).</div>
+                <div class="invalid-feedback">Informe um CEP válido com 8 números.</div>
+              </div>
+              <div class="col-md-7">
+                <label for="logradouro" class="form-label fw-bold">Logradouro (Rua / Av.)</label>
+                <input class="form-control" id="logradouro" name="logradouro" type="text" autocomplete="address-line1" required>
+                <div class="invalid-feedback">Informe o logradouro de entrega.</div>
+              </div>
+              <div class="col-md-3">
+                <label for="numero" class="form-label fw-bold">Número</label>
+                <input class="form-control" id="numero" name="numero" type="text" required>
+                <div class="invalid-feedback">Informe o número.</div>
+              </div>
+              <div class="col-md-9">
+                <label for="complemento" class="form-label fw-bold">Complemento <span class="text-secondary fw-normal">(opcional)</span></label>
+                <input class="form-control" id="complemento" name="complemento" type="text" autocomplete="address-line2">
+              </div>
+              <div class="col-md-5">
+                <label for="bairro" class="form-label fw-bold">Bairro</label>
+                <input class="form-control" id="bairro" name="bairro" type="text" required>
+                <div class="invalid-feedback">Informe o bairro.</div>
+              </div>
+              <div class="col-md-5">
+                <label for="cidade" class="form-label fw-bold">Cidade</label>
+                <input class="form-control" id="cidade" name="cidade" type="text" autocomplete="address-level2" required>
+                <div class="invalid-feedback">Informe a cidade.</div>
+              </div>
+              <div class="col-md-2">
+                <label for="estado" class="form-label fw-bold">UF</label>
+                <input class="form-control text-uppercase" id="estado" name="estado" type="text" maxlength="2" autocomplete="address-level1" required>
+                <div class="invalid-feedback">UF.</div>
+              </div>
+            </div>
+            <div id="cepFeedback" class="mt-3 fw-bold" role="status" aria-live="polite"></div>
+          </fieldset>
+
+          <fieldset class="checkout-fieldset mb-4">
+            <legend class="h5 fw-bold px-2 w-auto" style="color: var(--sticker-blue);">3. Pagamento simulado</legend>
+            <label for="pagamento" class="form-label fw-bold">Forma de pagamento</label>
+            <select class="form-select" id="pagamento" name="pagamento" required>
+              <option value="">Selecione uma opção...</option>
+              <option value="Pix Instantâneo">Pix Instantâneo</option>
+              <option value="Cartão de Crédito">Cartão de Crédito</option>
+              <option value="Boleto Bancário">Boleto Bancário</option>
+            </select>
+            <div class="invalid-feedback">Selecione uma forma de pagamento.</div>
+          </fieldset>
+
+          <div class="hero-card-note mb-4">
+            <div class="form-check">
+              <input class="form-check-input" id="termos" name="termos" type="checkbox" required>
+              <label class="form-check-label fw-bold" for="termos">
+                Confirmo que esta é uma simulação educacional e que os produtos são fictícios.
+              </label>
+              <div class="invalid-feedback">Você precisa confirmar antes de finalizar.</div>
+            </div>
+          </div>
+
+          <button class="btn btn-dtmf btn-lg" type="submit">Concluir pedido simulado</button>
+        </form>
+      </section>
+
+      <aside class="col-lg-4" aria-labelledby="titulo-resumo">
+        <div class="summary-box">
+          <h2 id="titulo-resumo" class="h4 fw-bold mb-3" style="color: var(--sticker-blue);">Resumo do Pedido</h2>
+          <div class="mb-3">
+            <span class="rule-badge mb-2" id="resumoRegra">-</span>
+            <p class="fw-bold mb-1" id="resumoProdutoNome">-</p>
+            <p class="small text-secondary mb-2" id="resumoPrecoUnitario">-</p>
+          </div>
+
+          <div class="mb-3">
+            <label for="resumoQuantidade" class="form-label small fw-bold">Quantidade</label>
+            <input type="number" id="resumoQuantidade" class="form-control quantity-field" min="1" max="10" value="1">
+          </div>
+
+          <div class="d-flex justify-content-between mb-2">
+            <span>Subtotal</span>
+            <span class="fw-bold" id="resumoSubtotal">R$ 0,00</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Frete calculado</span>
+            <span class="fw-bold" id="resumoFrete">R$ 0,00</span>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between fw-bold fs-5">
+            <span>Total</span>
+            <span id="resumoTotal" style="color: var(--palm-green);">R$ 0,00</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer py-4">
+    <div class="container">
+      <p class="mb-0 fw-bold">Almacén DtMF · De Puerto Rico para el Mundo.</p>
+    </div>
+  </footer>
+
+  <script src="js/produtos.js" defer></script>
+  <script src="js/checkout.js" defer></script>
+</body>
+
+</html>
